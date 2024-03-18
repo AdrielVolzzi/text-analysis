@@ -71,44 +71,46 @@ def distribuicao_comprimento_palavra(texto):
     return frequencia
 
 
-# Página de entrada
 if 'pagina' not in st.session_state:
     st.session_state.pagina = 'entrada'
     st.session_state.modo_entrada = 'Texto Direto'  # Modo padrão
 
-    st.title('Análise Estatística de Texto')
+st.title('Análise Estatística de Texto')
 
-    # Layout com botões lado a lado
-    col1, col2, col3 = st.columns(3)  # Cria três colunas
+# Layout com botões lado a lado
+col1, col2, col3 = st.columns(3)  # Cria três colunas
 
-    with col1:
-        if st.button('Inserir Texto Direto'):
-            st.session_state.modo_entrada = 'Texto Direto'
+with col1:
+    if st.button('Inserir Texto Direto'):
+        st.session_state.modo_entrada = 'Texto Direto'
 
-    with col2:
-        if st.button('Carregar Arquivo'):
-            st.session_state.modo_entrada = 'Arquivo'
+with col2:
+    if st.button('Carregar Arquivo'):
+        st.session_state.modo_entrada = 'Arquivo'
 
-    with col3:
-        if st.button('Usar URL de um Site'):
-            st.session_state.modo_entrada = 'URL de um Site'
+with col3:
+    if st.button('Usar URL de um Site'):
+        st.session_state.modo_entrada = 'URL de um Site'
 
-    # Condições para exibir a interface de entrada baseada no modo selecionado
-    if st.session_state.modo_entrada == 'Texto Direto':
-        texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
-    elif st.session_state.modo_entrada == 'Arquivo':
-        arquivo = st.file_uploader("Anexe um arquivo PDF, DOCX ou TXT:", type=["pdf", "docx", "txt"])
-        texto_entrada = extrair_texto(arquivo) if arquivo is not None else ""
-    elif st.session_state.modo_entrada == 'URL de um Site':
-        url_site = st.text_input("Cole a URL do site aqui:")
-        texto_entrada = extrair_texto_site(url_site) if url_site else ""
+# Condições para exibir a interface de entrada baseada no modo selecionado
+texto_entrada = ""
+if st.session_state.modo_entrada == 'Texto Direto':
+    texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
+elif st.session_state.modo_entrada == 'Arquivo':
+    arquivo = st.file_uploader("Anexe um arquivo PDF, DOCX ou TXT:", type=["pdf", "docx", "txt"])
+    if arquivo is not None:
+        texto_entrada = extrair_texto(arquivo)
+elif st.session_state.modo_entrada == 'URL de um Site':
+    url_site = st.text_input("Cole a URL do site aqui:")
+    if url_site:
+        texto_entrada = extrair_texto_site(url_site)
 
-
+if texto_entrada:
     analises = st.multiselect("Selecione as análises desejadas:", 
                               ['Nuvem de Palavras', 'Top Palavras', 'Top Bigramas', 'Top Trigramas', 'Top Quadrigramas', 'Distribuição de Comprimento de Palavra'])
     top_n = int(st.number_input("Especifique o Top N para análise (se aplicável):", min_value=1, max_value=100, value=20))
 
-    if st.button('Pronto') and texto_entrada:
+    if st.button('Pronto'):
         st.session_state.texto = texto_entrada
         st.session_state.analises = analises
         st.session_state.top_n = top_n
