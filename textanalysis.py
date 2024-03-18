@@ -77,19 +77,25 @@ if 'pagina' not in st.session_state:
 # Página de entrada
 if st.session_state.pagina == 'entrada':
     st.title('Análise Estatística de Texto')
+    
+    if st.button('Inserir Texto Direto'):
+        st.session_state.modo_entrada = 'Texto Direto'
 
-    # Modificações aqui: Botões para selecionar o modo de entrada
-    modo_entrada = st.radio("Selecione o modo de entrada:", ("Texto Direto", "Arquivo", "URL de um Site"))
+    if st.button('Carregar Arquivo'):
+        st.session_state.modo_entrada = 'Arquivo'
 
-    # Atualiza o estado com o modo de entrada selecionado
-    st.session_state.modo_entrada = modo_entrada
+    if st.button('Usar URL de um Site'):
+        st.session_state.modo_entrada = 'URL de um Site'
 
-    if modo_entrada == "Texto Direto":
+    if st.session_state.modo_entrada == 'Texto Direto':
+        # Mostrar campo de texto
         texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
-    elif modo_entrada == "Arquivo":
+    elif st.session_state.modo_entrada == 'Arquivo':
+        # Mostrar uploader de arquivo
         arquivo = st.file_uploader("Anexe um arquivo PDF, DOCX ou TXT:", type=["pdf", "docx", "txt"])
         texto_entrada = extrair_texto(arquivo) if arquivo is not None else ""
-    elif modo_entrada == "URL de um Site":
+    elif st.session_state.modo_entrada == 'URL de um Site':
+        # Mostrar campo para URL
         url_site = st.text_input("Cole a URL do site aqui:")
         texto_entrada = extrair_texto_site(url_site) if url_site else ""
 
