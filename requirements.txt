@@ -3,7 +3,7 @@ nltk
 wordcloud
 pdfplumber
 docx
-ollections
+collections
 matplotlib
 requests
 bs4
