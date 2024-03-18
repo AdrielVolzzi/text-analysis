@@ -103,7 +103,7 @@ if st.session_state.pagina == 'entrada':
 
     analises = st.multiselect("Selecione as análises desejadas:", 
                               ['Nuvem de Palavras', 'Top Palavras', 'Top Bigramas', 'Top Trigramas', 'Top Quadrigramas', 'Distribuição de Comprimento de Palavra'])
-    top_n = int(st.number_input("Especifique o Top N para análise (se aplicável):", min_value=1, max_value=100, value=20))
+    top_n = int(st.number_input("Especifique o Top N para análise:", min_value=1, max_value=100, value=20))
 
     if st.button('Pronto') and texto_entrada:
         st.session_state.texto = texto_entrada
