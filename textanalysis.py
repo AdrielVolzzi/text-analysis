@@ -70,34 +70,39 @@ def distribuicao_comprimento_palavra(texto):
     frequencia = Counter(comprimentos)
     return frequencia
 
-# Inicialização de variáveis de sessão
-if 'pagina' not in st.session_state:
-    st.session_state.pagina = 'entrada'
 
 # Página de entrada
-if st.session_state.pagina == 'entrada':
+if 'pagina' not in st.session_state:
+    st.session_state.pagina = 'entrada'
+    st.session_state.modo_entrada = 'Texto Direto'  # Modo padrão
+
     st.title('Análise Estatística de Texto')
-    
-    if st.button('Inserir Texto Direto'):
-        st.session_state.modo_entrada = 'Texto Direto'
 
-    if st.button('Carregar Arquivo'):
-        st.session_state.modo_entrada = 'Arquivo'
+    # Layout com botões lado a lado
+    col1, col2, col3 = st.columns(3)  # Cria três colunas
 
-    if st.button('Usar URL de um Site'):
-        st.session_state.modo_entrada = 'URL de um Site'
+    with col1:
+        if st.button('Inserir Texto Direto'):
+            st.session_state.modo_entrada = 'Texto Direto'
 
+    with col2:
+        if st.button('Carregar Arquivo'):
+            st.session_state.modo_entrada = 'Arquivo'
+
+    with col3:
+        if st.button('Usar URL de um Site'):
+            st.session_state.modo_entrada = 'URL de um Site'
+
+    # Condições para exibir a interface de entrada baseada no modo selecionado
     if st.session_state.modo_entrada == 'Texto Direto':
-        # Mostrar campo de texto
         texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
     elif st.session_state.modo_entrada == 'Arquivo':
-        # Mostrar uploader de arquivo
         arquivo = st.file_uploader("Anexe um arquivo PDF, DOCX ou TXT:", type=["pdf", "docx", "txt"])
         texto_entrada = extrair_texto(arquivo) if arquivo is not None else ""
     elif st.session_state.modo_entrada == 'URL de um Site':
-        # Mostrar campo para URL
         url_site = st.text_input("Cole a URL do site aqui:")
         texto_entrada = extrair_texto_site(url_site) if url_site else ""
+
 
     analises = st.multiselect("Selecione as análises desejadas:", 
                               ['Nuvem de Palavras', 'Top Palavras', 'Top Bigramas', 'Top Trigramas', 'Top Quadrigramas', 'Distribuição de Comprimento de Palavra'])
