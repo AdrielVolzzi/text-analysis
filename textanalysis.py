@@ -1,5 +1,6 @@
 import streamlit as st
-import nltk
+from nltk.corpus import stopwords
+from nltk import word_tokenize, download
 from nltk.util import ngrams
 from wordcloud import WordCloud
 import pdfplumber
@@ -13,8 +14,8 @@ nltk.download('stopwords')
 
 def processar_texto(texto, top_n=20):
     # Tokenização e remoção de stopwords
-    stop_words = set(nltk.corpus.stopwords.words('portuguese'))
-    palavras = [palavra for palavra in nltk.word_tokenize(texto.lower()) if palavra.isalpha() and palavra not in stop_words]
+    stop_words = set(stopwords.words('portuguese'))
+    palavras = [palavra for palavra in word_tokenize(texto.lower()) if palavra.isalpha() and palavra not in stop_words]
 
     # Frequência das palavras
     frequencia = Counter(palavras)
@@ -54,8 +55,8 @@ def extrair_texto_site(url):
         return ""
 
 def gerar_ngramas(texto, n=2, top_n=20):
-    stop_words = set(nltk.corpus.stopwords.words('portuguese'))
-    palavras = [palavra for palavra in nltk.word_tokenize(texto.lower()) if palavra.isalpha() and not palavra in stop_words]
+    stop_words = set(stopwords.words('portuguese'))
+    palavras = [palavra for palavra in word_tokenize(texto.lower()) if palavra.isalpha() and not palavra in stop_words]
     n_gramas = ngrams(palavras, n) if n > 1 else [(palavra,) for palavra in palavras]  # Ajuste para incluir unigramas como tuplas
     frequencia = Counter(n_gramas)
     # Converter n-gramas para string para exibição
@@ -63,8 +64,8 @@ def gerar_ngramas(texto, n=2, top_n=20):
     return mais_frequentes
 
 def distribuicao_comprimento_palavra(texto):
-    nltk.download('punkt')
-    palavras = nltk.word_tokenize(texto.lower())
+    download('punkt')
+    palavras = word_tokenize(texto.lower())
     comprimentos = [len(palavra) for palavra in palavras if palavra.isalpha()]
     frequencia = Counter(comprimentos)
     return frequencia
