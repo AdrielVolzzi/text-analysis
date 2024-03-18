@@ -1,0 +1,9 @@
+streamlit
+nltk
+wordcloud
+pdfplumber
+docx
+ollections
+matplotlib
+requests
+bs4
