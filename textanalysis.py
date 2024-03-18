@@ -9,8 +9,8 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
-nltk.download('punkt')
-nltk.download('stopwords')
+download('punkt')
+download('stopwords')
 
 def processar_texto(texto, top_n=20):
     # Tokenização e remoção de stopwords
