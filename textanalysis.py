@@ -77,38 +77,32 @@ if 'pagina' not in st.session_state:
 # Página de entrada
 if st.session_state.pagina == 'entrada':
     st.title('Análise Estatística de Texto')
-    texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
-    url_site = st.text_input("Cole a URL do site aqui:")
-    arquivo = st.file_uploader("", type=["pdf", "docx", "txt"], help="Anexe um arquivo PDF, DOCX ou TXT")
+
+    # Modificações aqui: Botões para selecionar o modo de entrada
+    modo_entrada = st.radio("Selecione o modo de entrada:", ("Texto Direto", "Arquivo", "URL de um Site"))
+
+    # Atualiza o estado com o modo de entrada selecionado
+    st.session_state.modo_entrada = modo_entrada
+
+    if modo_entrada == "Texto Direto":
+        texto_entrada = st.text_area("Insira seu texto aqui:", height=250)
+    elif modo_entrada == "Arquivo":
+        arquivo = st.file_uploader("Anexe um arquivo PDF, DOCX ou TXT:", type=["pdf", "docx", "txt"])
+        texto_entrada = extrair_texto(arquivo) if arquivo is not None else ""
+    elif modo_entrada == "URL de um Site":
+        url_site = st.text_input("Cole a URL do site aqui:")
+        texto_entrada = extrair_texto_site(url_site) if url_site else ""
+
     analises = st.multiselect("Selecione as análises desejadas:", 
                               ['Nuvem de Palavras', 'Top Palavras', 'Top Bigramas', 'Top Trigramas', 'Top Quadrigramas', 'Distribuição de Comprimento de Palavra'])
     top_n = int(st.number_input("Especifique o Top N para análise (se aplicável):", min_value=1, max_value=100, value=20))
-    
-    if st.button('Pronto'):
-        if arquivo is not None:
-            texto_entrada = extrair_texto(arquivo)
-            print(1)
-            st.session_state.texto = texto_entrada
-            st.session_state.analises = analises
-            st.session_state.top_n = top_n
-            st.session_state.pagina = 'resultados'
-            st.rerun()
-        elif texto_entrada:
-            st.session_state.texto = texto_entrada
-            st.session_state.analises = analises
-            st.session_state.top_n = top_n
-            st.session_state.pagina = 'resultados'
-            st.rerun()
-        elif url_site is not None:
-            texto_entrada = extrair_texto_site(url_site)
-            st.session_state.texto = texto_entrada
-            st.session_state.analises = analises
-            st.session_state.top_n = top_n
-            st.session_state.pagina = 'resultados'
-            st.rerun()
-            print(2)
-        else:
-            st.warning("Por favor, insira um texto ou anexe um arquivo.")
+
+    if st.button('Pronto') and texto_entrada:
+        st.session_state.texto = texto_entrada
+        st.session_state.analises = analises
+        st.session_state.top_n = top_n
+        st.session_state.pagina = 'resultados'
+        st.experimental_rerun()
 
 # Página de resultados
 elif st.session_state.pagina == 'resultados':
