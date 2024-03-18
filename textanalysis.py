@@ -70,28 +70,26 @@ def distribuicao_comprimento_palavra(texto):
     frequencia = Counter(comprimentos)
     return frequencia
 
-# Inicialização de variáveis de sessão
 if 'pagina' not in st.session_state:
     st.session_state.pagina = 'entrada'
-    st.session_state.modo_entrada = 'Texto Direto'  # Modo padrão
+    st.session_state.modo_entrada = 'Texto Direto'
 
 if st.session_state.pagina == 'entrada':
     st.title('Análise Estatística de Texto')
 
-    # Layout com botões lado a lado
     col1, col2, col3 = st.columns(3)  # Cria três colunas
 
     with col1:
-        if st.button('Inserir Texto Direto'):
+        if st.button('Inserir o Texto Abaixo:'):
             st.session_state.modo_entrada = 'Texto Direto'
 
     with col2:
-        if st.button('Carregar Arquivo'):
+        if st.button('Faça o Upload do Arquivo Desejado:'):
             st.session_state.modo_entrada = 'Arquivo'
 
     with col3:
-        if st.button('Usar URL de um Site'):
-            st.session_state.modo_entrada = 'URL de um Site'
+        if st.button('Insira a URL do Site Desejado'):
+            st.session_state.modo_entrada = 'Link'
 
     # Condições para exibir a interface de entrada baseada no modo selecionado
     if st.session_state.modo_entrada == 'Texto Direto':
